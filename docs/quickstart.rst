@@ -1,7 +1,7 @@
 Nexmo Client Library for Python
 ===============================
 
-|PyPI version| |Build Status|
+|PyPI version| |Build Status| |Coverage Status|
 
 This is the Python client library for Nexmo's API. To use it you'll need
 a Nexmo account. Sign up `for free at
@@ -12,8 +12,9 @@ nexmo.com <https://dashboard.nexmo.com/sign-up?utm_source=DEV_REL&utm_medium=git
 -  `SMS API <#sms-api>`__
 -  `Voice API <#voice-api>`__
 -  `Verify API <#verify-api>`__
+-  `Number Insight API <#number-insight-api>`__
+-  `Managing Secrets <#managing-secrets>`__
 -  `Application API <#application-api>`__
--  `Coverage <#api-coverage>`__
 -  `License <#license>`__
 
 Installation
@@ -25,7 +26,13 @@ To install the Python client library using pip:
 
     pip install nexmo
 
-Alternatively, you can clone the repository:
+To upgrade your installed client library using pip:
+
+::
+
+    pip install nexmo --upgrade
+
+Alternatively you can clone the repository:
 
 ::
 
@@ -34,7 +41,7 @@ Alternatively, you can clone the repository:
 Usage
 -----
 
-Begin by importing the nexmo module:
+Begin by importing the ``nexmo`` module:
 
 .. code:: python
 
@@ -62,10 +69,6 @@ In order to check signatures for incoming webhook requests, you'll also
 need to specify the ``signature_secret`` argument (or the
 ``NEXMO_SIGNATURE_SECRET`` environment variable).
 
-If the argument ``signature_method`` is omitted, it will default to the md5 hash
-algorithm. Otherwise, it will use the selected method as in md5, sha1, sha256 or
-sha512 with hmac.
-
 SMS API
 -------
 
@@ -87,6 +90,16 @@ Send a text message
 
 Docs:
 `https://docs.nexmo.com/messaging/sms-api/api-reference#request <https://docs.nexmo.com/messaging/sms-api/api-reference#request?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
+
+Tell Nexmo the SMS was received
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following submits a successful conversion to Nexmo with the current
+timestamp. This feature must be enabled on your account first.
+
+.. code:: python
+
+    response = client.submit_sms_conversion(message_id)
 
 Voice API
 ---------
@@ -134,6 +147,65 @@ Update a call
 
 Docs:
 `https://docs.nexmo.com/voice/voice-api/api-reference#call\_modify\_single <https://docs.nexmo.com/voice/voice-api/api-reference#call_modify_single?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
+
+Stream audio to a call
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+    stream_url = 'https://nexmo-community.github.io/ncco-examples/assets/voice_api_audio_streaming.mp3'
+
+    response = client.send_audio(uuid, stream_url=stream_url)
+
+Docs:
+`https://docs.nexmo.com/voice/voice-api/api-reference#stream\_put <https://docs.nexmo.com/voice/voice-api/api-reference#stream_put?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
+
+Stop streaming audio to a call
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+    response = client.stop_audio(uuid)
+
+Docs:
+`https://docs.nexmo.com/voice/voice-api/api-reference#stream\_delete <https://docs.nexmo.com/voice/voice-api/api-reference#stream_delete?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
+
+Send a synthesized speech message to a call
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+    response = client.send_speech(uuid, text='Hello')
+
+Docs:
+`https://docs.nexmo.com/voice/voice-api/api-reference#talk\_put <https://docs.nexmo.com/voice/voice-api/api-reference#talk_put?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
+
+Stop sending a synthesized speech message to a call
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+    response = client.stop_speech(uuid)
+
+Docs:
+`https://docs.nexmo.com/voice/voice-api/api-reference#talk\_delete <https://docs.nexmo.com/voice/voice-api/api-reference#talk_delete?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
+
+Send DTMF tones to a call
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+    response = client.send_dtmf(uuid, digits='1234')
+
+Docs:
+`https://docs.nexmo.com/voice/voice-api/api-reference#dtmf\_put <https://docs.nexmo.com/voice/voice-api/api-reference#dtmf_put?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
+
+Get recording
+~~~~~~~~~~~~~
+
+.. code:: python
+
+    response = client.get_recording(RECORDING_URL)
 
 Verify API
 ----------
@@ -195,6 +267,67 @@ Trigger next verification step
 Docs:
 `https://docs.nexmo.com/verify/api-reference/api-reference#control <https://docs.nexmo.com/verify/api-reference/api-reference#control?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
 
+Number Insight API
+------------------
+
+Basic Number Insight
+~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+    client.get_basic_number_insight(number='447700900000')
+
+Docs:
+`https://docs.nexmo.com/number-insight/basic <https://docs.nexmo.com/number-insight/basic?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
+
+Standard Number Insight
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+    client.get_standard_number_insight(number='447700900000')
+
+Docs:
+`https://docs.nexmo.com/number-insight/standard <https://docs.nexmo.com/number-insight/basic?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
+
+Advanced Number Insight
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: python
+
+    client.get_advanced_number_insight(number='447700900000')
+
+Docs:
+`https://docs.nexmo.com/number-insight/advanced <https://docs.nexmo.com/number-insight/advanced?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
+
+Managing Secrets
+----------------
+
+An API is provided to allow you to rotate your API secrets. You can
+create a new secret (up to a maximum of two secrets) and delete the
+existing one once all applications have been updated.
+
+List Secrets
+~~~~~~~~~~~~
+
+``python secrets = client.list_secrets(API_KEY)``
+
+Create A New Secret
+~~~~~~~~~~~~~~~~~~~
+
+Create a new secret (the created dates will help you know which is
+which): ``python client.create_secret(API_KEY, 'awes0meNewSekret!!;');``
+
+Delete A Secret
+~~~~~~~~~~~~~~~
+
+Delete the old secret (any application still using these credentials
+will stop working):
+
+.. code:: python
+
+    client.delete_secret(API_KEY, 'my-secret-id')
+
 Application API
 ---------------
 
@@ -203,7 +336,7 @@ Create an application
 
 .. code:: python
 
-    response = client.create_application(name='Example App', type='voice', answer_url=answer_url)
+    response = client.create_application(name='Example App', type='voice', answer_url=answer_url, event_url=event_url)
 
 Docs:
 `https://docs.nexmo.com/tools/application-api/api-reference#create <https://docs.nexmo.com/tools/application-api/api-reference#create?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
@@ -260,16 +393,6 @@ Validate webhook signatures
     else:
       # invalid signature
 
-
-    or by using signature method via POST:
-
-    client = nexmo.Client(signature_secret='secret', signature_method='sha256')
-
-    if client.check_signature(request.body.decode()):
-      # valid signature
-    else:
-      # invalid signature
-
 Docs:
 `https://docs.nexmo.com/messaging/signing-messages <https://docs.nexmo.com/messaging/signing-messages?utm_source=DEV_REL&utm_medium=github&utm_campaign=python-client-library>`__
 
@@ -289,61 +412,26 @@ specify a different token identifier:
 
     client.auth(nbf=nbf, exp=exp, jti=jti)
 
-API Coverage
+Contributing
 ------------
 
--  Account
+We :heart: contributions! But if you plan to work on something big or
+controversial, please `contact us <mailto:devrel@nexmo.com>`__ first!
 
-   -  [X] Balance
-   -  [X] Pricing
-   -  [X] Settings
-   -  [X] Top Up
-   -  [X] Numbers
+We recommend working on ``nexmo-python`` with a
+`virtualenv <https://virtualenv.pypa.io/en/stable/>`__. The following
+command will install all the Python dependencies you need to run the
+tests:
 
-      -  [X] Search
-      -  [X] Buy
-      -  [X] Cancel
-      -  [X] Update
+.. code:: bash
 
--  Number Insight
+    make install
 
-   -  [X] Basic
-   -  [X] Standard
-   -  [X] Advanced
-   -  [ ] Webhook Notification
+The tests are all written with pytest. You run them with:
 
--  Verify
+.. code:: bash
 
-   -  [X] Verify
-   -  [X] Check
-   -  [X] Search
-   -  [X] Control
-
--  Messaging
-
-   -  [X] Send
-   -  [ ] Delivery Receipt
-   -  [ ] Inbound Messages
-   -  [X] Search
-
-      -  [X] Message
-      -  [X] Messages
-      -  [X] Rejections
-
-   -  [X] US Short Codes
-
-      -  [X] Two-Factor Authentication
-      -  [X] Event Based Alerts
-
-         -  [X] Sending Alerts
-         -  [X] Campaign Subscription Management
-
--  Voice
-
-   -  [X] Outbound Calls
-   -  [ ] Inbound Call
-   -  [X] Text-To-Speech Call
-   -  [X] Text-To-Speech Prompt
+    make test
 
 License
 -------
@@ -354,3 +442,5 @@ This library is released under the `MIT License <LICENSE.txt>`__
    :target: https://badge.fury.io/py/nexmo
 .. |Build Status| image:: https://api.travis-ci.org/Nexmo/nexmo-python.svg?branch=master
    :target: https://travis-ci.org/Nexmo/nexmo-python
+.. |Coverage Status| image:: https://coveralls.io/repos/github/Nexmo/nexmo-python/badge.svg?branch=master
+   :target: https://coveralls.io/github/Nexmo/nexmo-python?branch=master

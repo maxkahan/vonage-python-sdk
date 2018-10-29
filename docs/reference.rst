@@ -1,6 +1,9 @@
 API Reference
 =============
 
-.. automodule:: nexmo
+.. module:: nexmo
+
+.. autoclass:: Client
    :members:
    :undoc-members:
+   :exclude-members: get, delete, parse, put, post
