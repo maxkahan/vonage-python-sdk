@@ -38,7 +38,10 @@ extensions = [
     "sphinx.ext.coverage",
     "sphinx.ext.viewcode",
     "sphinx.ext.githubpages",
+    "sphinx.ext.intersphinx",
 ]
+
+intersphinx_mapping = {"requests": ("http://docs.python-requests.org/en/master/", None)}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -58,8 +61,9 @@ master_doc = "index"
 
 # General information about the project.
 project = u"Nexmo"
-copyright = u"{0}, Tim Craft".format(datetime.datetime.now().year)
-author = u"Tim Craft"
+
+copyright = u"{}, Nexmo".format(datetime.datetime.now().year)
+author = u"Nexmo Developer Relations Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
