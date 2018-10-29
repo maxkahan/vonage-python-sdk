@@ -61,49 +61,51 @@ class AuthenticationError(ClientError):
 
 class Client:
     """
-            A configured Client object provides access to Nexmo APIs.
+    A configured Client object provides access to Nexmo APIs.
 
-            For most Nexmo APIs you will need to provide a ``key`` and a ``secret``. The Nexmo Voice API will require an
-            ``application_id`` and associated ``private_key``. Currently ``signature_secret`` and ``signature_method``
-            are only supported by the :meth:`signature` and :meth:`check_signature` methods, and are not used to
-            authenticate calls to the APIs.
+    For most Nexmo APIs you will need to provide a ``key`` and a ``secret``. The Nexmo Voice API will require an
+    ``application_id`` and associated ``private_key``. Currently ``signature_secret`` and ``signature_method``
+    are only supported by the :meth:`signature` and :meth:`check_signature` methods, and are not used to
+    authenticate calls to the APIs.
 
-            The ``app_name`` and ``app_version`` parameters are sent in the HTTP header to the Nexmo service, and are
-            used for internal statistics.
+    The ``app_name`` and ``app_version`` parameters are sent in the HTTP header to the Nexmo service, and are
+    used for internal statistics.
 
-            Several parameters can be supplied as environment variables *instead* of explicitly providing them as
-            constructor arguments. These are:
+    Several parameters can be supplied as environment variables *instead* of explicitly providing them as
+    constructor arguments. These are:
 
-            ======================= ==========================
-            Parameter               Environment Variable
-            ======================= ==========================
-            ``key``                 ``NEXMO_API_KEY``
-            ``secret``              ``NEXMO_API_SECRET``
-            ``signature_secret``    ``NEXMO_SIGNATURE_SECRET``
-            ``signature_method``    ``NEXMO_SIGNATURE_METHOD``
-            ======================= ==========================
+    ======================= ==========================
+    Parameter               Environment Variable
+    ======================= ==========================
+    ``key``                 ``NEXMO_API_KEY``
+    ``secret``              ``NEXMO_API_SECRET``
+    ``signature_secret``    ``NEXMO_SIGNATURE_SECRET``
+    ``signature_method``    ``NEXMO_SIGNATURE_METHOD``
+    ======================= ==========================
 
-            :param key: Your Nexmo API key. Required for most API calls.
-            :type key: str or None
-            :param secret: Your Nexmo API secret. Required for most API calls.
-            :type secret: str or None
-            :param signature_secret: Your Signature Secret. Required by `#signature` and `#check_signature` methods.
-            :type signature_secret: str or None
-            :param signature_method: The encryption method used for signature encryption. ``None`` indicates
-                ``MD5 Hash`` encryption. The values ``"md5"``, ``"sha1"`` ``"sha256"``, and ``"sha512"`` set the
-                specified *HMAC* algorithm. Ensure the value for this matches the value set in the Nexmo Dashboard, or
-                your signature generation and validation will fail.
-            :type signature_method: str or None
-            :param application_id: The Application ID of the application to be used for Nexmo Voice API calls.
-            :type application_id: str or None
-            :param private_key: Either a path to the Nexmo Application's private key, or the contents of the key
-                itself, in PEM format.
-            :type private_key: str or None
-            :param app_name: The name of your app, without spaces.
-            :type app_name: str or None
-            :param app_version: The version of your app.
-            :type app_version: str or None
-            """
+    :param key: Your Nexmo API key. Required for most API calls.
+    :type key: str or None
+    :param secret: Your Nexmo API secret. Required for most API calls.
+    :type secret: str or None
+    :param signature_secret: Your Signature Secret.
+        Required by `#signature` and `#check_signature` methods.
+    :type signature_secret: str or None
+    :param signature_method: The encryption method used for signature encryption.
+        ``None`` indicates ``MD5 Hash`` encryption.
+        The values ``"md5"``, ``"sha1"`` ``"sha256"``, and ``"sha512"`` set the specified *HMAC* algorithm.
+        Ensure the value for this matches the value set in the Nexmo Dashboard,
+        or your signature generation and validation will fail.
+    :type signature_method: str or None
+    :param application_id: The ID of the Application to be used for Nexmo Voice API calls.
+    :type application_id: str or None
+    :param private_key: Either a path to the Nexmo Application's private key,
+        or the contents of the key itself, in PEM format.
+    :type private_key: str or None
+    :param app_name: The name of your app, without spaces.
+    :type app_name: str or None
+    :param app_version: The version of your app.
+    :type app_version: str or None
+    """
 
     def __init__(
         self,
