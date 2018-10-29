@@ -1,3 +1,14 @@
+"""
+    Nexmo
+    ~~~~~
+
+    The official Python client library for the Nexmo API.
+
+    :copyright: ©️ 2018 Nexmo
+    :license: MIT, see LICENSE.txt for details.
+"""
+
+
 from datetime import datetime
 import logging
 from platform import python_version
@@ -49,6 +60,51 @@ class AuthenticationError(ClientError):
 
 
 class Client:
+    """
+            A configured Client object provides access to Nexmo APIs.
+
+            For most Nexmo APIs you will need to provide a ``key`` and a ``secret``. The Nexmo Voice API will require an
+            ``application_id`` and associated ``private_key``. Currently ``signature_secret`` and ``signature_method``
+            are only supported by the :meth:`signature` and :meth:`check_signature` methods, and are not used to
+            authenticate calls to the APIs.
+
+            The ``app_name`` and ``app_version`` parameters are sent in the HTTP header to the Nexmo service, and are
+            used for internal statistics.
+
+            Several parameters can be supplied as environment variables *instead* of explicitly providing them as
+            constructor arguments. These are:
+
+            ======================= ==========================
+            Parameter               Environment Variable
+            ======================= ==========================
+            ``key``                 ``NEXMO_API_KEY``
+            ``secret``              ``NEXMO_API_SECRET``
+            ``signature_secret``    ``NEXMO_SIGNATURE_SECRET``
+            ``signature_method``    ``NEXMO_SIGNATURE_METHOD``
+            ======================= ==========================
+
+            :param key: Your Nexmo API key. Required for most API calls.
+            :type key: str or None
+            :param secret: Your Nexmo API secret. Required for most API calls.
+            :type secret: str or None
+            :param signature_secret: Your Signature Secret. Required by `#signature` and `#check_signature` methods.
+            :type signature_secret: str or None
+            :param signature_method: The encryption method used for signature encryption. ``None`` indicates
+                ``MD5 Hash`` encryption. The values ``"md5"``, ``"sha1"`` ``"sha256"``, and ``"sha512"`` set the
+                specified *HMAC* algorithm. Ensure the value for this matches the value set in the Nexmo Dashboard, or
+                your signature generation and validation will fail.
+            :type signature_method: str or None
+            :param application_id: The Application ID of the application to be used for Nexmo Voice API calls.
+            :type application_id: str or None
+            :param private_key: Either a path to the Nexmo Application's private key, or the contents of the key
+                itself, in PEM format.
+            :type private_key: str or None
+            :param app_name: The name of your app, without spaces.
+            :type app_name: str or None
+            :param app_version: The version of your app.
+            :type app_version: str or None
+            """
+
     def __init__(
         self,
         key=None,
@@ -60,6 +116,7 @@ class Client:
         app_name=None,
         app_version=None,
     ):
+
         self.api_key = key or os.environ.get("NEXMO_API_KEY", None)
 
         self.api_secret = secret or os.environ.get("NEXMO_API_SECRET", None)
@@ -96,12 +153,53 @@ class Client:
         self.auth_params = {}
 
     def auth(self, params=None, **kwargs):
+        """
+        Provide data which will be stored in any JWT tokens created by this Client.
+
+        .. Note:: Values set using this method will *override* any values generated dynamically.
+
+        :param params: A dict of values to be stored in any generated JWT tokens.
+        :type params: dict or None
+        :param kwargs: As an alternative to providing ``params``, values can be provided as keyword arguments.
+        """
         self.auth_params = params or kwargs
 
     def send_message(self, params):
+        """
+        Send an SMS.
+
+        Request ``params`` and response format are described at
+        `Nexmo Developer <https://developer.nexmo.com/api/sms#send-an-sms>`_
+
+        >>> client.send_message({
+        ...     'from': 'Python', 'to': '447720716744', 'text': 'Hello world'
+        ... })
+        {'message-count': '1',
+         'messages': [{'message-id': '0C000000F2FA5506',
+                       'message-price': '0.03330000',
+                       'network': '23410',
+                       'remaining-balance': '18.12389450',
+                       'status': '0',
+                       'to': '447720716744'}]}
+
+        :param dict params: A mapping of parameters describing the SMS to be sent.
+        :return: A ``dict`` containing the JSON response from the Nexmo API.
+        """
+
         return self.post(self.host, "/sms/json", params)
 
     def get_balance(self):
+        """
+        Obtain the amount of money left in a Nexmo account.
+
+        The response format is described at response format are described at `Nexmo Developer <https://developer.nexmo.com/api/developer/account#get-balance>`_
+
+
+        >>> client.get_balance()
+        {'value': 18.1571945, 'autoReload': False}
+
+        :return: A ``dict`` containing the JSON response from the Nexmo API.
+        """
         return self.get(self.host, "/account/get-balance")
 
     def get_country_pricing(self, country_code):
@@ -556,9 +654,9 @@ def _format_date_param(params, key, format="%Y-%m-%d %H:%M:%S"):
 
     If the value is already a str, or is not in the dict, no change is made.
 
-    :param params: A `dict` of params that may contain a `datetime` value.
-    :param key: The datetime value to be converted to a `str`
-    :param format: The `strftime` format to be used to format the date. The default value is '%Y-%m-%d %H:%M:%S'
+    :param dict params: Params that may contain a ``datetime` value.
+    :param datetime key: The datetime value to be converted to a ``str``
+    :param str format: The `strftime` format to be used to format the date. The default value is ``'%Y-%m-%d %H:%M:%S'``
     """
     if key in params:
         param = params[key]
