@@ -192,9 +192,9 @@ class Client:
 
     def get_balance(self):
         """
-        Obtain the amount of money left in a Nexmo account.
+        Get the amount of money left in a Nexmo account.
 
-        The response format is described at response format are described at `Nexmo Developer <https://developer.nexmo.com/api/developer/account#get-balance>`_
+        The response format is described at `Nexmo Developer <https://developer.nexmo.com/api/developer/account#get-balance>`_
 
 
         >>> client.get_balance()
@@ -205,6 +205,33 @@ class Client:
         return self.get(self.host, "/account/get-balance")
 
     def get_country_pricing(self, country_code):
+        """
+        Get the pricing data for a given country.
+
+        The response format is described at `Nexmo Developer <>`_
+
+        >>> client.get_country_pricing('GB')
+        {
+            "countryCode": "GB",
+            "countryDisplayName": "United Kingdom",
+            "countryName": "United Kingdom",
+            "currency": "EUR",
+            "defaultPrice": "0.03330000",
+            "dialingPrefix": "44",
+            "networks": [
+                {
+                    "currency": "EUR",
+                    "networkCode": "12345",
+                    "networkName": "Acme Telco",
+                    "price": "0.03330000"
+                }
+            ]
+        }
+
+        :param country_code: A string containing an
+            `ISO 3166-1 alpha-2 <https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2>`_ country code.
+        :return: A dict containing pricing data.
+        """
         return self.get(
             self.host, "/account/get-pricing/outbound", {"country": country_code}
         )
@@ -372,6 +399,10 @@ class Client:
         return self.post(self.api_host, "/verify/control/json", params or kwargs)
 
     def get_basic_number_insight(self, params=None, **kwargs):
+        """
+        Get basic information about a phone number,
+        including country of origin and correct formatting.
+        """
         return self.get(self.api_host, "/ni/basic/json", params or kwargs)
 
     def get_standard_number_insight(self, params=None, **kwargs):
