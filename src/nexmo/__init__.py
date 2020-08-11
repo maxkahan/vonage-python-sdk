@@ -291,7 +291,7 @@ class Client:
             stacklevel=2,
         )
         return self.post(self.api_host(), "/verify/check/json", params or kwargs)
-def start_psd2_verification_request(self, params=None, **kwargs)
+def start_psd2_verification_request(self, params=None, **kwargs):
         return self.post(
             self.api_host(), "/verify/psd2/json", params or kwargs
         )
