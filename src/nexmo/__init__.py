@@ -293,6 +293,11 @@ class Client:
 
         return self.post(self.api_host(), "/verify/check/json", params or kwargs)
 
+    def start_psd2_verification_request(self, params=None, **kwargs)
+        return self.post(
+            self.api_host(), "/verify/psd2/json", params or kwargs
+        )
+
     def get_verification(self, request_id):
         return self.get(
             self.api_host(), "/verify/search/json", {"request_id": request_id}
