@@ -1,7 +1,7 @@
 import vonage
 
 class ShortCodes:
-    #To init Sms class pass a client reference or a key and secret
+    #To init ShortCodes class pass a client reference or a key and secret
     def __init__(
         self,
         client=None,

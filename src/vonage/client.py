@@ -11,6 +11,8 @@ from .ussd import *
 from .voice import *
 from .verify import *
 
+from .messages import Messages
+
 import logging
 from datetime import datetime
 from platform import python_version
@@ -118,7 +120,7 @@ class Client:
         if app_name and app_version:
             user_agent += f" {app_name}/{app_version}"
 
-        self.headers = {"User-Agent": user_agent, "Accept": "application/json"}
+        self.headers = {"User-Agent": user_agent, "Content-Type": "application/json", "Accept": "application/json"}
 
         self.auth_params = {}
 
@@ -131,7 +133,7 @@ class Client:
         self.application_v2 = ApplicationV2(api_server)
 
         self.session = requests.Session()
-
+        
     # Get and Set __host attribute
     def host(self, value=None):
         if value is None:

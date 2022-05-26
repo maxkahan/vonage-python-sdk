@@ -1,7 +1,7 @@
 import vonage
+# from message_classes import *
 
-class Ussd:
-    #To init Ussd class pass a client reference or a key and secret
+class Messages:
     def __init__(
         self,
         client=None,
@@ -21,9 +21,8 @@ class Ussd:
                 )
         except Exception as e:
             print(f'Error: {str(e)}')
+        
+    def send_message(self, params):
+        return self._client.post(self._client.api_host(), "/v1/messages", params, header_auth=True)
 
-    def send_ussd_push_message(self, params=None, **kwargs):
-        return self._client.post(self._client.host(), "/ussd/json", params or kwargs)
 
-    def send_ussd_prompt_message(self, params=None, **kwargs):
-        return self._client.post(self._client.host(), "/ussd-prompt/json", params or kwargs)
